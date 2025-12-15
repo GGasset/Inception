@@ -7,6 +7,7 @@ services:
      - docker-network
     expose:
      - "3306:3306"
+    restart: on-failure:3
 
   wordpress:
     volumes:
@@ -14,10 +15,11 @@ services:
     expose:
      - "3306:3306"
      - "9000:9000"
+    restart: on-failure:3
 
   NGINX:
     volumes:
-     - wordpressDB:~/data/web_files
+     - website_files:~/data/web_files
     networks:
      - docker-network
      - www
@@ -25,6 +27,7 @@ services:
      - "9000:9000"
     ports:
      - "443:443"
+    restart: on-failure:3
 
 
 volumes:
