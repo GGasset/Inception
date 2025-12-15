@@ -1,0 +1,42 @@
+
+services:
+  MariaDB:
+    volumes:
+     - wordpressDB:~/data/db/
+    networks:
+     - docker-network
+    expose:
+     - "3306:3306"
+
+  wordpress:
+    volumes:
+     - website_files:~/data/web_files
+    expose:
+     - "3306:3306"
+     - "9000:9000"
+
+  NGINX:
+    volumes:
+     - wordpressDB:~/data/web_files
+    networks:
+     - docker-network
+     - www
+    expose:
+     - "9000:9000"
+    ports:
+     - "443:443"
+
+
+volumes:
+  wordpressDB:
+    driver_opts:
+      size: "350MB"
+
+  website_files:
+    driver_opts:
+      size: "350MB"
+
+networks:
+  www: {}
+  docker-network:
+    internal: true
