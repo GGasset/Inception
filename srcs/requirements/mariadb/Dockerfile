@@ -15,4 +15,4 @@ RUN sudo apt-get install -y mariadb-server mariadb-client
 
 RUN apt-get update
 
-ENTRYPOINT [ "mariadb" ]
+ENTRYPOINT [ "mariadb", "--port=3306" ]

@@ -29,7 +29,9 @@ services:
     expose:
      - "9000:9000"
     ports:
-     - "4242:443"
+     - target: "443"
+       published: "443"
+
     restart: on-failure:3
 
 
