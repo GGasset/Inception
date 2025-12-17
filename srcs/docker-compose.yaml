@@ -1,9 +1,9 @@
 
 services:
-  MariaDB:
-    build: ./requirements/mariadb/Dockerfile
+  mariadb:
+    build: ./requirements/mariadb
     volumes:
-     - wordpressDB:~/data/db/
+     - wordpressDB:/home/ggasset-/data/db/
     networks:
      - docker-network
     expose:
@@ -11,36 +11,31 @@ services:
     restart: on-failure:3
 
   wordpress:
-    build: ./requirements/wordpress/Dockerfile
+    build: ./requirements/wordpress
     volumes:
-     - website_files:~/data/web_files
+     - website_files:/home/ggasset-/data/web_files
     expose:
      - "3306:3306"
      - "9000:9000"
     restart: on-failure:3
 
-  NGINX:
-    build: ./requirements/nginx/Dockerfile
+  nginx:
+    build: ./requirements/nginx
     volumes:
-     - website_files:~/data/web_files
+     - website_files:/home/ggasset-/data/web_files
     networks:
      - docker-network
      - www
     expose:
      - "9000:9000"
     ports:
-     - "443:443"
+     - "4242:443"
     restart: on-failure:3
 
 
 volumes:
   wordpressDB:
-    driver_opts:
-      size: "350MB"
-
   website_files:
-    driver_opts:
-      size: "350MB"
 
 networks:
   www: {}
