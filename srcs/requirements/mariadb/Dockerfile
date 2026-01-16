@@ -9,10 +9,6 @@ RUN apt-get install -y procps
 
 RUN sudo apt-get install -y mariadb-server mariadb-client
 
-#RUN sudo mariadb-secure-installation << EOF \
-#	
-#EOF
-
 RUN apt-get update
 
 ENTRYPOINT [ "mariadb", "--port=3306" ]
