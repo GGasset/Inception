@@ -24,7 +24,8 @@ RUN sudo apt install -y nginx
 RUN sudo apt install -y openssl
 
 COPY ./conf/nginx.conf /etc/nginx/
-
+COPY ../../../secrets/cert.pem /etc/nginx
+COPY ../../../secrets/key.pem /etc/nginx
 
 ENTRYPOINT [ "nginx", "--with-http_ssl_module" ]
 
