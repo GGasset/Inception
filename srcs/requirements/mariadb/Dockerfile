@@ -7,8 +7,19 @@ RUN apt-get -y install sudo
 RUN sudo apt-get -y install curl
 RUN apt-get install -y procps
 
-RUN sudo apt-get install -y mariadb-server mariadb-client
+#                                             Remove cached packages
+RUN sudo apt-get install -y mariadb-server && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update
+# Copy configuration
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY tools/init_db.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/*
 
-ENTRYPOINT [ "mariadb", "--port=3306" ]
+RUN mkdir -p /run/mysqld
+RUN chown mysql:mysql /run/mysqld
+RUN chown mysql:mysql /var/lib/mysql
+RUN chmod 755 /run/mysqld
+
+EXPOSE 3306
+
+ENTRYPOINT [ "init_db.sh" ]

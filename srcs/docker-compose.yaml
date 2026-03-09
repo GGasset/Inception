@@ -1,45 +1,86 @@
 
 services:
   mariadb:
-    build: ./requirements/mariadb
-    volumes:
-     - wordpressDB:/home/ggasset-/data/db/
+    build: 
+      context: requirements/mariadb
+    image: mariadb:inception
+    container_name: mariadb
     networks:
-     - docker-network
-    expose:
-     - "3306:3306"
-    restart: on-failure:3
+      - inception-network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_root_password
+      - db_password
+    restart: always
 
   wordpress:
-    build: ./requirements/wordpress
+    build:
+      context: requirements/wordpress
+    image: wordpress:inception
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    networks:
+      - inception-network
     volumes:
-     - website_files:/home/ggasset-/data/web_files
-    expose:
-     - "3306:3306"
-     - "9000:9000"
-    restart: on-failure:3
+      - wordpress_data:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+      WORDPRESS_TABLE_PREFIX: wp_
+    secrets:
+      - db_password
+    restart: always
 
   nginx:
-    build: ./requirements/nginx
-    volumes:
-     - website_files:/home/ggasset-/data/web_files
+    build:
+      context: requirements/nginx
+    image: nginx:inception
+    container_name: nginx
+    depends_on:
+      - wordpress
     networks:
-     - docker-network
-     - www
-    expose:
-     - "9000:9000"
+      - inception-network
     ports:
-     - target: "443"
-       published: "443"
-
-    restart: on-failure:3
-
-
-volumes:
-  wordpressDB:
-  website_files:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+    restart: always
 
 networks:
-  www: {}
-  docker-network:
-    internal: true
+  inception-network:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      #device: /home/${USER}/data/mariadb
+      device: ~/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/data/wordpress
+      #device: /home/${USER}/data/wordpress
+
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
+
+

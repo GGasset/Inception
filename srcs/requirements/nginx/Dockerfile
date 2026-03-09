@@ -1,31 +1,22 @@
 FROM debian:stable
 
-RUN apt-get update && apt-get install -y apt-transport-https
-RUN apt-get -y install sudo
-RUN sudo apt-get -y install curl
 
-RUN sudo apt install -y curl gnupg2 ca-certificates lsb-release debian-archive-keyring
+# Install nginx and openssl
+RUN apt-get update && apt-get install -y nginx openssl
 
-RUN curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
-    | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+# Ensure nginx runs as www-data with correct UID
+RUN usermod -u 33 www-data && groupmod -g 33 www-data
 
-RUN mkdir /root/.gnupg
-RUN chmod 777 /root/.gnupg
-RUN gpg --dry-run --quiet --no-keyring --import --import-options import-show /usr/share/keyrings/nginx-archive-keyring.gpg
+# Create SSL directory
+RUN mkdir -p /etc/nginx/ssl
 
-RUN echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
-https://nginx.org/packages/debian `lsb_release -cs` nginx" \
-    | sudo tee /etc/apt/sources.list.d/nginx.list
+# Copy configuration files
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY tools/ssl_keys_generator.sh /usr/local/bin/
 
+# Set permissions
+RUN chmod +x /usr/local/bin/*.sh
 
-RUN sudo apt update -y
-RUN sudo apt install -y nginx
+EXPOSE 443
 
-RUN sudo apt install -y openssl
-
-COPY ./conf/nginx.conf /etc/nginx/
-COPY ../../../secrets/cert.pem /etc/nginx
-COPY ../../../secrets/key.pem /etc/nginx
-
-ENTRYPOINT [ "nginx", "--with-http_ssl_module" ]
-
+ENTRYPOINT ["/usr/local/bin/ssl_keys_generator.sh"]
