@@ -64,16 +64,16 @@ networks:
 volumes:
   mariadb_data:
     driver: local
-    driver_opts:
-      type: none
+    #driver_opts:
+      #type: none
       #o: bind
-      device: ~/data/mariadb
+      #device: ~/data/mariadb
   wordpress_data:
     driver: local
-    driver_opts:
-      type: none
+    #driver_opts:
+      #type: none
       #o: bind
-      device: ~/data/wordpress
+      #device: ~/data/wordpress
 
 secrets:
   db_root_password:
