@@ -40,8 +40,8 @@ This project is a ***hands-on***, complete project designed to learn ***Docker a
 * Docker networks in contrast to the Host network, gives the application limited access to ports specified in the docker compose, in addition, it can only communicate with external images or host ports when specified.
 
 ### Docker volumes vs Bind Mounts
-
-
+* Named volumes are arbitrarily decided by docker where are they going to be stored, they can be set to a specific path by creating a mix of both using driver options parameters, primarily are named volumes
+* Bind mounts are folders that are linked between docker images and host filesystem
 
 ---
 ## Instructions
