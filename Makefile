@@ -13,7 +13,7 @@ down:
 	
 
 clean:
-	-sudo rm -fr ~/data/*
+	-rm -fr ~/data/*
 	-rm ${ENV_FILE}
 	-rm -fr ./secrets
 
