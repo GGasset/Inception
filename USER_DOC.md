@@ -3,7 +3,7 @@
 
 ## Understand what services are provided by the stack.
 
-* This Docker project creates a ***wordpress*** site accessible by ```localhost```, using ***nginx+php-fpm*** as a proxy and ***mariadb*** (mysql) as the wordpress database
+* This Docker project creates a ***wordpress+php-fpm*** site accessible by ```localhost```, using ***nginx*** as a proxy and ***mariadb*** (mysql) as the wordpress database
 
 ## Start and stop the project.
 

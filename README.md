@@ -5,8 +5,8 @@ _This project has been created as part of the 42 curriculum by ggasset-_
 ## Description
 
 This project is a ***hands-on***, complete project designed to learn ***Docker and Docker compose***, as well as, ***web technology architecure*** and the basics of:
-* ***nginx with php-fpm***
-* ***wordpress***
+* ***nginx***
+* ***wordpress with php-fpm***
 * ***mariadb***
 
 ### Goal
