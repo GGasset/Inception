@@ -1,5 +1,5 @@
 
-FROM debian:stable
+FROM debian:Bookworm
 
 RUN apt-get update && apt-get install -y \
   php-fpm \
