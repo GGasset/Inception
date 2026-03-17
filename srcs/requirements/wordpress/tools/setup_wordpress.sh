@@ -60,7 +60,21 @@ EOF
     chmod +x wp-cli.phar
     mv ./wp-cli.phar ./wp
 
-    ./wp core install --url=https://ggasset-.42.fr --title="gg" --admin_user=gg --admin_password=123 --admin_email=ggasset-@student.42madrid.com
+    WP_CLI="./wp --allow-root"
+
+# ensure DB tables do not already exist, then install
+if ! $WP_CLI core is-installed --path="$WP_PATH" >/dev/null 2>&1; then
+  $WP_CLI core install \
+    --url="https://ggasset-.42.fr" \
+    --title="gg" \
+    --admin_user="gg" \
+    --admin_password="123" \
+    --admin_email="ggasset-@student.42madrid.com" \
+    --skip-email \
+    --path="$WP_PATH" --quiet
+fi
+
+    #./wp core install --url=https://ggasset-.42.fr --title="gg" --admin_user=gg --admin_password=123 --admin_email=ggasset-@student.42madrid.com
 
     #./wp language core install es_ES
     #./wp site switch-language es_ES
