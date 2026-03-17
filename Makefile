@@ -5,18 +5,26 @@ ENV_FILE=./srcs/.env
 all: setup_folders ${ENV_FILE}
 	docker compose -f ./srcs/docker-compose.yaml up -d
 
+attached: setup_folders ${ENV_FILE}
+	docker compose -f ./srcs/docker-compose.yaml up
+
+build: setup_folders ${ENV_FILE}
+	docker compose -f ./srcs/docker-compose.yaml up --build
+
 re: clean setup_folders ${ENV_FILE}
-	docker compose -f ./srcs/docker-compose.yaml up -d --build
+	docker compose -f ./srcs/docker-compose.yaml up --build
 
 down:
 	docker compose -f ./srcs/docker-compose.yaml down
 	
 
-clean:
+clean: down
 	-rm ${ENV_FILE}
 	-rm -fr ./secrets
 	-docker volume rm srcs_mariadb_data
 	-docker volume rm srcs_wordpress_data
+	-sudo rm -fr ~/data/mariadb
+	-sudo rm -fr ~/data/wordpress
 
 MYSQL_ROOT_PASSWORD:=$(shell tr -dc A-Za-z0-9 </dev/urandom | head -c 8)
 MYSQL_PASSWORD=$(shell tr -dc A-Za-z0-9 </dev/urandom | head -c 8)

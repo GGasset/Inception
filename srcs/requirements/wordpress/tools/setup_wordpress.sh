@@ -55,6 +55,28 @@ EOF
     find "$WP_PATH" -type f -exec chmod 640 {} \;
     chown -R www-data:www-data "$WP_PATH"
 
+    cd $WP_PATH
+    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    chmod +x wp-cli.phar
+    mv ./wp-cli.phar ./wp
+
+    ./wp core install --url=https://ggasset-.42.fr --title="gg" --admin_user=gg --admin_password=123 --admin_email=ggasset-@student.42madrid.com
+
+    #./wp language core install es_ES
+    #./wp site switch-language es_ES
+#
+    #./wp user create GG ggasset-@student.42madrid.com --role=administrator --user_pass='123'
+#
+    #./wp option update blogname 'ggasset-.42.fr'
+    #./wp option update home 'https://ggasset-.42.fr'
+    #./wp option update siteurl 'https://ggasset-.42.fr'
+    #./wp option update admin_email 'ggasset-@student.42madrid.com'
+#
+    #./wp option update blog_public '1'
+    #./wp option update start_of_week 1
+
+    cd -
+
     echo "WordPress setup complete."
 else
     echo "WordPress already initialized, skipping setup."

@@ -1,5 +1,5 @@
 
-FROM debian:Bookworm
+FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y \
   php-fpm \
@@ -13,12 +13,12 @@ RUN apt-get update && apt-get install -y \
   php-zip \
   wget \
   curl \
-  && ln -s /usr/sbin/php-fpm8.4 /usr/local/bin/php-fpm
+  && ln -s /usr/sbin/php-fpm8.2 /usr/local/bin/php-fpm
 
 WORKDIR /var/www/html
 
 # PHP-fpm conf
-COPY conf/www.conf /etc/php/8.4/fpm/pool.d/
+COPY conf/www.conf /etc/php/8.2/fpm/pool.d/
 
 # copy + set permissions of setup script
 COPY tools/setup_wordpress.sh /usr/local/bin/
