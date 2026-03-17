@@ -76,6 +76,8 @@ fi
 
     #./wp core install --url=https://ggasset-.42.fr --title="gg" --admin_user=gg --admin_password=123 --admin_email=ggasset-@student.42madrid.com
 
+    ./wp user create user1 newuser@example.com --role=subscriber --user_pass=123
+
     #./wp language core install es_ES
     #./wp site switch-language es_ES
 #
